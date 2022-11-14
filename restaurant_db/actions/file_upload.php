@@ -3,7 +3,7 @@ function file_upload($picture)
 {
     $result = new stdClass();
     $result->fileName = 'default-image.jpg';
-    $result->error = true;
+    $result->error = false;
 
     $fileName = $picture['name'];
     $fileType = $picture['type'];
@@ -20,8 +20,8 @@ function file_upload($picture)
         if (in_array($fileExtension, $filesAllowed)) {
             if ($fileError === 0) {
                 if ($fileSize < 500000) {
-                    $fileNewName = uniqid('') . '.' . $fileExtension;
-                    $destination = "../pictures/{$fileNewName}";
+                    $fileNewName = uniqid('') . "." . $fileExtension;
+                    $destination = "../pictures/$fileNewName";
                     if (move_uploaded_file($fileTmpName, $destination)) {
                         $result->error = false;
                         $result->fileName = $fileNewName;

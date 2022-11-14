@@ -4,7 +4,7 @@ require_once "actions/db_connect.php";
 if ($_GET['id']) {
     $id = $_GET['id'];
 
-    $sql = "SELECT * FROM dishes WHERE id = '$id'";
+    $sql = "SELECT * FROM dish WHERE id = '$id'";
     $result = mysqli_query($connection, $sql);
     $tbody = "";
     if (mysqli_num_rows($result) == 1) {
@@ -12,13 +12,13 @@ if ($_GET['id']) {
         $name = $data['name'];
         $image = $data['image'];
         $price = $data['price'];
-        $description = $data['description'];
+        $ingredients = $data['ingredients'];
         $tbody = "
             <tr>
             <td><img class='img-thumbnail' src='pictures/$image'</td>
             <td>$name</td>
             <td>$price</td>
-            <td>$description</td> 
+            <td>$ingredients</td> 
             <td><a href='update.php?id=$id'><button class='btn btn-primary btn-sm' type='button'>Edit</button></a>
             <a href='delete.php?id=$id'><button class='btn btn-danger btn-sm' type='button'>Delete</button></a>
             </td>
@@ -57,13 +57,13 @@ if ($_GET['id']) {
             text-align: center;
         }
     </style>
-    <title>Restaurant</title>
+    <title>Restaurant | Details</title>
 </head>
 
 <body>
     <div class="manageProduct w-75 mt-3">
         <div class='mb-3'>
-            <a href='index.php'><button class='btn btn-secondary btn-sm' type='button'>Back</button></a>
+            <a href=javascript:history.back()><button class='btn btn-warning' type='button'>Back</button></a>
             <a href="create.php"><button class='btn btn-primary' type="button">Add product</button></a>
         </div>
         <p class='h2'>Dishes</p>
@@ -73,7 +73,7 @@ if ($_GET['id']) {
                     <th>Image</th>
                     <th>Name</th>
                     <th>Price</th>
-                    <th>Description</th>
+                    <th>Ingredients</th>
                     <th>Action</th>
                 </tr>
             </thead>

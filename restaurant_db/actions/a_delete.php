@@ -2,11 +2,11 @@
 require_once "db_connect.php";
 
 if ($_POST) {
-    $id = $_POST["dishId"];
-    $picture = $_POST["picture"];
-    ($picture == "default-image.png") ?: unlink("../pictures/$picture");
+    $id = $_POST["id"];
+    $image = $_POST["image"];
+    ($image == "default-image.png") ?: unlink("../pictures/$image");
 
-    $sql = "DELETE FROM dishes WHERE dishId = {$id}";
+    $sql = "DELETE FROM dish WHERE id = {$id}";
 
     if (mysqli_query($connection, $sql) === TRUE) {
         $class = "success";
@@ -16,6 +16,8 @@ if ($_POST) {
         $message = "The entry was not deleted due to: <br>" . $connection->error;
     }
     mysqli_close($connection);
+} else {
+    header("location: ../error.php");
 }
 ?>
 

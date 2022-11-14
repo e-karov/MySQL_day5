@@ -5,14 +5,15 @@ require_once "file_upload.php";
 if ($_POST) {
     $name = $_POST['name'];
     $price = $_POST['price'];
-    $description = $_POST['description'];
+    $ingredients = $_POST['ingredients'];
+
     $upload_error = "";
     $image = file_upload($_FILES['image']);
 
-    $sql = "INSERT INTO dishes (name, price, image, description)
-                VALUES ('$name', '$price', '$image->fileName', '$description')";
+    $sql = "INSERT INTO dish (name, price, ingredients, image )
+                VALUES ('$name', '$price', '$ingredients', '$image->fileName')";
     if (mysqli_query($connection, $sql) === true) {
-        $class = "succsess";
+        $class = "success";
         $message = "
             The entry below was successfully created <br>
             <table class = 'table w-50'>
@@ -23,7 +24,7 @@ if ($_POST) {
             </table>
             <hr> 
             ";
-        $upload_error = ($image->error != true) ? $image->ErrorMessage : "";
+        $upload_error = ($image->error != false) ? $image->ErrorMessage : "";
     } else {
         $class = "danger";
         $message = "Error while creating record. Try again: <br> {$connection->error}";

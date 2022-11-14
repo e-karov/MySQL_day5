@@ -3,13 +3,13 @@ require_once "actions/db_connect.php";
 
 if ($_GET['id']) {
     $id = $_GET['id'];
-    $sql = "SELECT * FROM dishes WHERE id = {$id}";
+    $sql = "SELECT * FROM dish WHERE id = {$id}";
     $result = mysqli_query($connection, $sql);
     if (mysqli_num_rows($result) == 1) {
         $data = mysqli_fetch_assoc($result);
         $name = $data['name'];
         $price = $data['price'];
-        $description = $data['description'];
+        $ingredients = $data['ingredients'];
         $image = $data['image'];
     } else {
         header("location: error.php");
@@ -24,7 +24,7 @@ if ($_GET['id']) {
 <html>
 
 <head>
-    <title>Edit Product</title>
+    <title>Restaurant | Edit Product</title>
     <?php require_once 'components/boot.php' ?>
     <style type="text/css">
         fieldset {
@@ -58,14 +58,14 @@ if ($_GET['id']) {
                     <td><input class="form-control" type="file" name="image" /></td>
                 </tr>
                 <tr>
-                    <th>Description</th>
-                    <td><input class="form-control" type="text" name="description" /></td>
+                    <th>Ingredients</th>
+                    <td><input class="form-control" type="text" name="ingredients" value="<?= $ingredients ?>" /></td>
                 </tr>
                 <tr>
                     <input type="hidden" name="id" value="<?php echo $data['id'] ?>" />
                     <input type="hidden" name="image" value="<?php echo $data['image'] ?>" />
                     <td><button class="btn btn-success" type="submit">Save Changes</button></td>
-                    <td><a href="index.php"><button class="btn btn-warning" type="button">Back</button></a></td>
+                    <td><a href="javascript:history.back()"><button class="btn btn-warning" type="button">Back</button></a></td>
                 </tr>
             </table>
         </form>

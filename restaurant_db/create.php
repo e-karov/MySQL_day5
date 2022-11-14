@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php require_once 'components/boot.php' ?>
-    <title>Restaurant | Add Product</title>
+    <title>Restaurant | Add Dish</title>
     <style>
         fieldset {
             margin: auto;
@@ -17,7 +17,7 @@
 
 <body>
     <fieldset>
-        <legend class='h2'>Add Product</legend>
+        <legend class='h2'>Add Dish</legend>
         <form action="actions/a_create.php" method="post" enctype="multipart/form-data">
             <table class='table'>
                 <tr>
@@ -29,8 +29,8 @@
                     <td><input class='form-control' type="number" name="price" placeholder="Price" step="any" /></td>
                 </tr>
                 <tr>
-                    <th>Description</th>
-                    <td><input class='form-control' type="text" name="description" placeholder="Description"></td>
+                    <th>ingredients</th>
+                    <td><input class='form-control' type="text" name="ingredients" placeholder="ingredients"></td>
                 </tr>
                 <tr>
                     <th>Image</th>
