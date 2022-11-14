@@ -1,27 +1,60 @@
 <?php
+session_start();
 require_once "actions/db_connect.php";
 
-$sql = "SELECT * FROM dish";
-$data = mysqli_query($connection, $sql);
-$tbody = "";
-
-if (mysqli_num_rows($data) > 0) {
-    while ($row = mysqli_fetch_assoc($data)) {
-        $tbody .= "
-        <tr>
-            <td><img class='img-thumbnail' src='pictures/" . $row['image'] . "'</td>
-            <td>" . $row['name'] . "</td>
-            <td>" . $row['price'] . "</td>
-            <td> <a href='details.php?id=" . $row['id'] . "'>
-                    <button class='btn btn-info btn-sm' type='button'>Details</button>
-                </a> 
-            </td> 
-        </tr>
-        ";
-    }
-} else {
-    $tbody = "<tr><td colspan='4' class='text-center'>No data available</td></tr>";
+if (isset($_SESSION['user'])) {
+    header("location: home.php");
+} elseif (isset($_SESSION['adm'])) {
+    header("location: dashboard.php");
 }
+
+$error = false;
+$email = $password = $emailError = $passError = "";
+
+if (isset($_POST['btn-login'])) {
+    $email = trim($_POST['email']);
+    $email = strip_tags($email);
+    $email = htmlspecialchars($email);
+
+    $pass = trim($_POST['pass']);
+    $pass = strip_tags($pass);
+    $pass = htmlspecialchars($pass);
+
+    if (empty($email)) {
+        $error = true;
+        $emailError = "Please enter your email address.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = true;
+        $emailError = "Please enter valid email address.";
+    }
+
+    if (empty($pass)) {
+        $error = true;
+        $passError = "Please enter your password.";
+    }
+
+    if (!$error) {
+        $password = hash('sha256', $pass);
+
+        $query = "SELECT id, first_name, password, status FROM users WHERE email = '$email'";
+
+        $result = mysqli_query($connection, $query);
+        $row = mysqli_fetch_assoc($result);
+
+        if (mysqli_num_rows($result) == 1 && $row['password'] == $password) {
+            if ($row['status'] == "adm") {
+                $_SESSION['adm'] = $row['id'];
+                header("location: dashboard.php");
+            } elseif ($row['status'] == "user") {
+                $_SESSION['user'] = $row['id'];
+                header("location: home.php");
+            }
+        } else {
+            $errMsg = "Incorect Credentials, please try again...";
+        }
+    }
+}
+mysqli_close($connection);
 ?>
 
 <!DOCTYPE html>
@@ -29,51 +62,32 @@ if (mysqli_num_rows($data) > 0) {
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php require_once "components/boot.php"; ?>
-    <style type="text/css">
-        .manageProduct {
-            margin: auto;
-        }
-
-        .img-thumbnail {
-            width: 70px !important;
-            height: 70px !important;
-        }
-
-        td {
-            text-align: left;
-            vertical-align: middle;
-
-        }
-
-        tr {
-            text-align: center;
-        }
-    </style>
-    <title>Restaurant</title>
+    <title>Login & Registration System</title>
+    <?php require_once 'components/boot.php' ?>
 </head>
 
 <body>
-    <div class="manageProduct w-75 mt-3">
-        <div class='mb-3'>
-            <a href="create.php"><button class='btn btn-primary' type="button">Add product</button></a>
-        </div>
-        <p class='h2'>Dishes</p>
-        <table class='table table-striped'>
-            <thead class='table-success'>
-                <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php echo $tbody; ?>
-            </tbody>
-        </table>
+    <div class="container">
+        <form class="w-75" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="off">
+            <h2>Login</h2>
+            <hr />
+            <?php
+            if (isset($errMsg)) {
+                echo $errMsg;
+            }
+            ?>
+
+            <input type="email" autocomplete="off" name="email" class="form-control" placeholder="Your Email" value="<?php echo $email; ?>" maxlength="40" />
+            <span class="text-danger"><?php echo $emailError; ?></span>
+
+            <input type="password" name="pass" class="form-control" placeholder="Your Password" maxlength="15" />
+            <span class="text-danger"><?php echo $passError; ?></span>
+            <hr />
+            <button class="btn btn-block btn-primary" type="submit" name="btn-login">Sign In</button>
+            <hr />
+            <a href="login/register.php">Not registered yet? Click here</a>
+        </form>
     </div>
 </body>
 
