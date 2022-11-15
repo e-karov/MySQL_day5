@@ -36,7 +36,7 @@ if (isset($_POST['btn-signup'])) {
     $pass = htmlspecialchars($pass);
 
     $uploadError = "";
-    $picture = file_upload($_FILES['picture'], 'login/pictures');
+    $picture = file_upload($_FILES['picture']);
 
     if (empty($first_name || empty($last_name))) {
         $error = true;
@@ -79,16 +79,16 @@ if (isset($_POST['btn-signup'])) {
     if (!$error) {
         $query = "
                 INSERT INTO users(first_name, last_name, password, birthdate, email, picture)
-                VALUES ('$first_name', '$last_name', '$password', '$birthdate', '$email', '$picture->fileName')
+                VALUES ('$first_name', '$last_name', '$hashedPass', '$birthdate', '$email', '$picture->fileName')
             ";
 
         $result = mysqli_query($connection, $query);
 
         if ($result) {
-            $errType = "success";
+            $class = "success";
             $errMSG = "Successfully registered! You may login now.";
         } else {
-            $errType = "danger";
+            $class = "danger";
             $errMSG = "Something went wrong. Plese try again...";
             $uploadError = ($picture->error != 0) ? $picture->ErrorMessage : "";
         }
@@ -115,7 +115,7 @@ mysqli_close($connection);
             <?php
             if (isset($errMSG)) {
             ?>
-                <div class="alert alert-<?php echo $errTyp ?>">
+                <div class="alert alert-<?php echo $class ?>">
                     <p><?php echo $errMSG; ?></p>
                     <p><?php echo $uploadError; ?></p>
                 </div>
@@ -144,7 +144,7 @@ mysqli_close($connection);
             <hr />
             <button type="submit" class="btn btn-block btn-primary" name="btn-signup">Sign Up</button>
             <hr />
-            <a href="index.php">Sign in Here...</a>
+            <a href="../index.php">Sign in Here...</a>
         </form>
     </div>
 </body>
