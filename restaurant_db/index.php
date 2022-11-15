@@ -3,9 +3,10 @@ session_start();
 require_once "actions/db_connect.php";
 
 if (isset($_SESSION['user'])) {
-    header("location: home.php");
+    header("location: login/home.php");
+    exit;
 } elseif (isset($_SESSION['adm'])) {
-    header("location: dashboard.php");
+    header("location: login/dashboard.php");
 }
 
 $error = false;
@@ -42,14 +43,16 @@ if (isset($_POST['btn-login'])) {
         $row = mysqli_fetch_assoc($result);
 
         if (mysqli_num_rows($result) == 1 && $row['password'] == $password) {
+            $_SESSION['username'] = $row['first_name'];
             if ($row['status'] == "adm") {
                 $_SESSION['adm'] = $row['id'];
-                header("location: dashboard.php");
+                header("location:login/dashboard.php");
             } elseif ($row['status'] == "user") {
                 $_SESSION['user'] = $row['id'];
-                header("location: home.php");
+                header("location: login/home.php");
             }
         } else {
+
             $errMsg = "Incorect Credentials, please try again...";
         }
     }
@@ -78,13 +81,13 @@ mysqli_close($connection);
             }
             ?>
 
-            <input type="email" autocomplete="off" name="email" class="form-control" placeholder="Your Email" value="<?php echo $email; ?>" maxlength="40" />
+            <input type="email" name="email" class="form-control" placeholder="Your Email" value="<?php echo $email; ?>" maxlength="40" />
             <span class="text-danger"><?php echo $emailError; ?></span>
 
             <input type="password" name="pass" class="form-control" placeholder="Your Password" maxlength="15" />
             <span class="text-danger"><?php echo $passError; ?></span>
             <hr />
-            <button class="btn btn-block btn-primary" type="submit" name="btn-login">Sign In</button>
+            <button class="btn btn-block btn-primary" type="submit" name="btn-login">Log In</button>
             <hr />
             <a href="login/register.php">Not registered yet? Click here</a>
         </form>

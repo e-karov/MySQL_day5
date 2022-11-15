@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once "actions/db_connect.php";
 
 $sql = "SELECT * FROM dish";
@@ -21,6 +22,29 @@ if (mysqli_num_rows($data) > 0) {
     }
 } else {
     $tbody = "<tr><td colspan='4' class='text-center'>No data available</td></tr>";
+}
+
+if (isset($_SESSION['user'])) {
+    $nav = "
+        <div class='container'>
+        <div class='hero'>
+        <a href='main-page.php' style='display: inline-block;margin-right:30px; color:yellow;'>Main Page</a>
+        <a href='login/update.php?id=$_SESSION[user]' style='display: inline-block;margin-right:30px; color:yellow;'>Update your profile</a>
+        <a href='login/logout.php?logout' style='display: inline-block;float: right; color:yellow;'>Sign Out</a>
+        </div>
+        </div>
+    ";
+} elseif (isset($_SESSION['adm'])) {
+    $nav = "
+        <div class='container'>
+        <div class='hero'>
+        <a href='login/dashboard.php' style='display: inline-block;margin-right:30px; color:yellow;'>Dashboard</a>
+        <a href='create.php' style='display: inline-block;margin-right:30px; color:yellow;'>Add Product</a>
+        <a href='login/update.php?id=$_SESSION[adm]' style='display: inline-block;margin-right:30px; color:yellow;'>Update your profile</a>
+        <a href='login/logout.php?logout' style='display: inline-block;float:right; color:yellow;'>Sign Out</a>
+        </div>
+        </div>
+    ";
 }
 ?>
 
@@ -45,11 +69,20 @@ if (mysqli_num_rows($data) > 0) {
         td {
             text-align: left;
             vertical-align: middle;
-
         }
 
         tr {
             text-align: center;
+        }
+
+        .userImage {
+            width: 200px;
+            height: 200px;
+        }
+
+        .hero {
+            background: rgb(2, 0, 36);
+            background: linear-gradient(24deg, rgba(2, 0, 36, 1) 0%, rgba(0, 212, 255, 1) 100%);
         }
     </style>
     <title>Restaurant</title>
@@ -58,7 +91,7 @@ if (mysqli_num_rows($data) > 0) {
 <body>
     <div class="manageProduct w-75 mt-3">
         <div class='mb-3'>
-            <a href="create.php"><button class='btn btn-primary' type="button">Add product</button></a>
+            <?= $nav; ?>
         </div>
         <p class='h2'>Dishes</p>
         <table class='table table-striped'>

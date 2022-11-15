@@ -44,11 +44,11 @@ mysqli_close($connection);
 
     <div class="container">
         <div class="hero">
-            <img class="userImage" src="pictures/<?php echo $row['picture']; ?>" alt="<?php echo $row['first_name']; ?>">
+            <img class="userImage" src="../pictures/<?php echo $row['picture']; ?>" alt="<?php echo $row['first_name']; ?>">
             <p class="text-white" style="margin-right: 100px; display:inline-block">Hi <?php echo $row['first_name']; ?></p>
             <a href="../main-page.php" style="display: inline-block;margin-right:30px; color:yellow;">Main Page</a>
             <a href="update.php?id=<?= $_SESSION['user'] ?>" style="display: inline-block;margin-right:30px; color:yellow;">Update your profile</a>
-            <a href="logout.php" style="display: inline-block;margin-right:30px; color:yellow;">Sign Out</a>
+            <a href="logout.php?logout" style="display: inline-block;margin-right:30px; color:yellow;">Sign Out</a>
 
         </div>
     </div>

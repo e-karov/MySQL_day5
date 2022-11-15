@@ -55,7 +55,7 @@ if ($_GET['id']) {
                 </tr>
                 <tr>
                     <th>Picture</th>
-                    <td><input class="form-control" type="file" name="image" /></td>
+                    <td><input class="form-control" type="file" name="image" value="<?= $image ?>" /></td>
                 </tr>
                 <tr>
                     <th>Ingredients</th>

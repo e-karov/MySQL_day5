@@ -3,10 +3,14 @@ session_start();
 if (!isset($_SESSION['adm']) && !isset($_SESSION['user'])) {
     header("Location: ../index.php");
     exit;
-} else {
-    header("Location: ../main-page.php");
+} else if (isset($_SESSION['user'])) {
+    header("location: home.php");
+} else if (isset($_SESSION['adm']) != "") {
+    header("Location: dashboard.php");
 }
+
 if (isset($_GET['logout'])) {
+    var_dump($_GET);
     unset($_SESSION['user']);
     unset($_SESSION['adm']);
     session_unset();

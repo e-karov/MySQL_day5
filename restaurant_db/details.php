@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once "actions/db_connect.php";
 
 if ($_GET['id']) {
@@ -13,7 +14,10 @@ if ($_GET['id']) {
         $image = $data['image'];
         $price = $data['price'];
         $ingredients = $data['ingredients'];
-        $tbody = "
+        $tbody = "";
+
+        if (isset($_SESSION['adm'])) {
+            $tbody = "
             <tr>
             <td><img class='img-thumbnail' src='pictures/$image'</td>
             <td>$name</td>
@@ -24,6 +28,18 @@ if ($_GET['id']) {
             </td>
             </tr>
         ";
+        } else if (isset($_SESSION['user'])) {
+            $tbody = "
+            <tr>
+            <td><img class='img-thumbnail' src='pictures/$image'</td>
+            <td>$name</td>
+            <td>$price</td>
+            <td>$ingredients</td> 
+            <td><a href='update.php?id=$id'><button class='btn btn-primary btn-sm' type='button'>Order</button></a>
+            </td>
+            </tr>
+            ";
+        }
     } else {
         header("location: error.php");
     }

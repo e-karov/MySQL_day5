@@ -18,7 +18,7 @@ if (isset($_SESSION["adm"])) {
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $sql = "SELECT * FROM users WHERE id = {$id}";
+    $sql = "SELECT * FROM users WHERE id = '$id'";
     $result = mysqli_query($connection, $sql);
     if (mysqli_num_rows($result) == 1) {
         $data = mysqli_fetch_assoc($result);
